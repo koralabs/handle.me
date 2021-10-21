@@ -1,0 +1,10 @@
+[build]
+  command = "yarn build"
+  publish = "public/"
+
+[[plugins]]
+  package = "@netlify/plugin-gatsby"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@emurgo/cardano-serialization-lib-nodejs", "@emurgo/cip14-js"]

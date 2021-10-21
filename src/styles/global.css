@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .PhoneInputInput {
+    @apply focus:ring-0 focus:ring-opacity-0 border-2 outline-none bg-dark-100 border-dark-300 px-6 py-4 text-xl w-full appearance-none rounded-lg;
+  }
+
+  #more {
+      margin-left: calc(50% - 50vw);
+      @apply relative w-screen;
+  }
+
+  html {
+      scroll-behavior: smooth;
+  }
+
+  [class*="hover:"] {
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  p {
+      @apply mb-4;
+  }
+
+  ul {
+      @apply pl-4 ml-4 list-disc;
+  }
+
+  ol {
+      @apply pl-4 ml-4 list-decimal;
+  }
+
+  li {
+      @apply leading-loose;
+  }
+
+  code,
+  pre {
+      @apply bg-dark-300 p-1 rounded-lg border border-dark-350 text-xs px-2 overflow-x-auto;
+  }
+
+  .svg-icon {
+  width: 1em;
+  height: 1em;
+  }
+
+  .svg-icon path,
+  .svg-icon polygon,
+  .svg-icon rect {
+  fill: currentColor;
+  }
+
+  .svg-icon circle {
+  stroke: currentColor;
+  stroke-width: 1;
+  }
+
+  .mailchimp-email {
+      background: #eee;
+      @apply border-0;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .custom-loader {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+  }
+  .custom-loader div {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    animation: custom-loader 1.2s linear infinite;
+  }
+  .custom-loader div:nth-child(1) {
+    top: 8px;
+    left: 8px;
+    animation-delay: 0s;
+  }
+  .custom-loader div:nth-child(2) {
+    top: 8px;
+    left: 32px;
+    animation-delay: -0.4s;
+  }
+  .custom-loader div:nth-child(3) {
+    top: 8px;
+    left: 56px;
+    animation-delay: -0.8s;
+  }
+  .custom-loader div:nth-child(4) {
+    top: 32px;
+    left: 8px;
+    animation-delay: -0.4s;
+  }
+  .custom-loader div:nth-child(5) {
+    top: 32px;
+    left: 32px;
+    animation-delay: -0.8s;
+  }
+  .custom-loader div:nth-child(6) {
+    top: 32px;
+    left: 56px;
+    animation-delay: -1.2s;
+  }
+  .custom-loader div:nth-child(7) {
+    top: 56px;
+    left: 8px;
+    animation-delay: -0.8s;
+  }
+  .custom-loader div:nth-child(8) {
+    top: 56px;
+    left: 32px;
+    animation-delay: -1.2s;
+  }
+  .custom-loader div:nth-child(9) {
+    top: 56px;
+    left: 56px;
+    animation-delay: -1.6s;
+  }
+  @keyframes custom-loader {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
