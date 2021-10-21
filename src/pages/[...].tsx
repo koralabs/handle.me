@@ -4,8 +4,6 @@ import SEO from "../components/seo";
 import LogoMark from "../images/logo-single.svg";
 
 function IndexPage({ params }) {
-  const route = params["*"];
-  const paths = route.split("/");
   const [loading, setIsLoading] = useState<boolean>(true);
   const [handle, setHandle] = useState<string>(null);
   const [address, setAddress] = useState<string>(null);
@@ -13,12 +11,15 @@ function IndexPage({ params }) {
   const [copying, setCopying] = useState<boolean>(false);
 
   useEffect(() => {
+    const route = params["*"];
+    const paths = route.split("/");
+
     if (paths.length > 1) {
       setValidHandle(false);
     } else {
       setHandle(paths[0]);
     }
-  }, [handle, validHandle, setIsLoading, paths]);
+  }, [handle, validHandle, setIsLoading]);
 
   const handleCopy = async () => {
     navigator.clipboard.writeText(address);
