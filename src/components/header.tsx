@@ -1,7 +1,5 @@
+import React, { useState, FC } from "react";
 import { Link } from "gatsby";
-import React, { useState, FC, useEffect } from "react";
-import { getAccessTokenFromCookie, getSessionTokenFromCookie } from "../lib/helpers/session";
-import { useAccessOpen } from "../lib/hooks/access";
 import Button from "./button";
 
 import Logo from './logo';
@@ -37,7 +35,7 @@ const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
 
   return (
     <>
-      <header className={`p-4 mx-auto md:p-8 ${className}`} style={{ minHeight: 120 }}>
+      <header className={`p-4 mx-auto md:p-8 -mb-1 ${className}`}>
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between">
           <Link to="/">
             <h1 className="flex items-center no-underline">
@@ -46,7 +44,7 @@ const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
             </h1>
           </Link>
 
-          <div className="flex items-center justify-center mr-auto relative">
+          <div className="flex items-center justify-center ml-auto relative">
             <button
               className="items-center block px-3 py-2 border-dark-100 text-white border border-white rounded md:hidden"
               onClick={() => toggleExpansion(!isExpanded)}
@@ -80,14 +78,6 @@ const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
               })}
             </nav>
           </div>
-          {showMint && (
-            <Button
-              animate
-              href={'/mint'}
-            >
-              Beta Sale Open! &rarr;
-            </Button>
-          )}
         </div>
       </header>
     </>

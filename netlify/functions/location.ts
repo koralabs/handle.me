@@ -5,13 +5,16 @@ import {
   HandlerResponse,
 } from "@netlify/functions";
 import { fetch } from 'cross-fetch';
+import Fingerprint from '@emurgo/cip14-js';
+
 import { HEADER_HANDLE } from "../../src/lib/constants";
 
-interface LookupResponseBody {
+export interface LookupResponseBody {
   error: boolean;
   message?: string;
   address: string | null;
-  fingerprint: string | null;
+  policyId: string | null;
+  assetName: string | null;
 }
 
 const getNodeEndpointUrl = () => process.env.NODE_ENV !== 'production'
@@ -29,7 +32,7 @@ const fetchNodeApp = async (
   const { headers, ...rest } = params;
 
   return fetch(
-    `${getNodeEndpointUrl()}/${endpoint}`,
+    `${getNodeEndpointUrl()}${endpoint}`,
     {
       headers: {
         'Authorization': `Basic ${token}`,
@@ -58,19 +61,19 @@ const handler: Handler = async (
   }
 
   try {
-    const data: LookupResponseBody = await (await fetch(`${getNodeEndpointUrl()}/location`, {
-      method: 'POST',
+    const data: LookupResponseBody = await fetchNodeApp(`/location`, {
+      method: 'GET',
       headers: {
-        'Authorization': `Basic ${process.env.NODE_AUTH_TOKEN_MAINNET}`,
         [HEADER_HANDLE]: handle
       }
-    })).json();
+    }).then(res => res.json());
 
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     };
   } catch (e) {
+    console.log(e);
     return {
       statusCode: 500,
       body: JSON.stringify({
@@ -80,3 +83,5 @@ const handler: Handler = async (
     };
   }
 };
+
+export { handler };
