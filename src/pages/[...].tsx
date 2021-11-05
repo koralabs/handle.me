@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Fingerprint from '@emurgo/cip14-js';
 import { LookupResponseBody } from "../../netlify/functions/location";
 import SEO from "../components/seo";
 import 'buffer';
@@ -7,6 +6,8 @@ import 'buffer';
 import LogoMark from "../images/logo-single.svg";
 import { HEADER_HANDLE } from "../lib/constants";
 import { Button } from '../components/button';
+import { navigate } from "gatsby-link";
+import { isValid } from "../lib/helpers/nfts";
 
 interface FingerprintData {
   policyId: string | null;
@@ -30,13 +31,13 @@ function IndexPage({ params }) {
     const route = params["*"];
     const paths = route.split("/");
 
-    if (paths.length === 1) {
+    if (paths.length === 1 && isValid(paths[0])) {
       setValidHandle(true);
-      setHandle(paths[0].replace('$', ''));
+      setHandle(paths[0]);
     } else {
       setValidHandle(false);
     }
-  }, [handle, validHandle, setValidHandle]);
+  }, [handle, validHandle]);
 
   useEffect(() => {
     if (!handle || address || !validHandle) {
@@ -49,7 +50,7 @@ function IndexPage({ params }) {
     const loadAddress = async () => {
       await fetch('/.netlify/functions/location', {
         headers: {
-          [HEADER_HANDLE]: paths[0].replace('$', '')
+          [HEADER_HANDLE]: paths[0]
         }
       })
       .then(async res => {
@@ -83,13 +84,14 @@ function IndexPage({ params }) {
     }, 1000);
   };
 
-  console.log(fingerprintData)
-
   return (
     <>
       <SEO title={`$${handle}`} />
       <section id="top" className="z-0 md:max-w-xl mx-auto relative">
         <div className="grid grid-cols-12">
+          <p className="text-center w-full absolute">
+            <button className="mb-4 transform -translate-y-12" onClick={() => navigate('/')}>&larr; Search</button>
+          </p>
           <div className="col-span-12 md:col-span-8 md:col-start-3 gap-4 bg-dark-200 rounded-lg shadow-lg place-content-start p-4 lg:p-8 mb-16">
             <h2 className="text-4xl font-bold mb-8 text-center">
               Send a Payment

@@ -4,7 +4,6 @@ import { HandleMintContext } from "../../context/mint";
 import Background from "../../images/code.svg";
 import FullLogo from "../../images/logo-dark.svg";
 import { normalizeNFTHandle } from "../../lib/helpers/nfts";
-import { HandleDetails } from "../HandleSearch";
 import Logo from "./logo";
 
 interface NFTPreviewProps {
@@ -14,11 +13,9 @@ interface NFTPreviewProps {
 }
 
 const NFTPreview: FC<NFTPreviewProps> = ({
-  handle,
-  showPrice = true,
-  showHeader = true,
+  handle
 }) => {
-  const { isPurchasing, reservedHandles, primed } = useContext(HandleMintContext);
+  const { reservedHandles, primed } = useContext(HandleMintContext);
 
   const textSize = () => {
     if (handle.length < 3) {
@@ -34,16 +31,6 @@ const NFTPreview: FC<NFTPreviewProps> = ({
 
   return (
     <>
-      {!isPurchasing && (
-        <>
-          {showHeader && <p className="m-0 text-center">Your NFT Preview</p>}
-          {showPrice && (
-            <div className="text-center mt-2 mb-8">
-              <HandleDetails />
-            </div>
-          )}
-        </>
-      )}
       <div className="flex justify-center h-full w-full">
         <div
           className={`${

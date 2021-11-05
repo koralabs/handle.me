@@ -5,7 +5,6 @@ import {
   HandlerResponse,
 } from "@netlify/functions";
 import { fetch } from 'cross-fetch';
-import Fingerprint from '@emurgo/cip14-js';
 
 import { HEADER_HANDLE } from "../../src/lib/constants";
 
@@ -17,9 +16,7 @@ export interface LookupResponseBody {
   assetName: string | null;
 }
 
-const getNodeEndpointUrl = () => process.env.NODE_ENV !== 'production'
-  ? process.env.NODEJS_APP_TESTNET_URL
-  : process.env.NODEJS_APP_MAINNET_URL
+const getNodeEndpointUrl = () => process.env.NODEJS_APP_ENDPOINT;
 
 const fetchNodeApp = async (
   endpoint: string,
