@@ -36,13 +36,11 @@ const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
           </Link>
 
           <div className="flex items-center justify-center ml-auto relative">
-            <nav
-              className={`block p-8`}
-            >
+            <nav>
               {navItems.map((link) => {
                 return (
                   <Link
-                    className={'block mt-4 text-dark-300 hover:text-primary-200 no-underline md:inline-block md:mt-0 md:ml-6 text-dark-400'}
+                    className={'block text-dark-300 hover:text-primary-200 no-underline mt-0 text-dark-400'}
                     activeClassName="border-primary-200"
                     key={link.title}
                     to={link.route}
