@@ -17,10 +17,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    route: 'https://adahandle.com',
-    title: `About`,
-  },
-  {
     route: `https://adahandle.com/mint`,
     title: `Get a Handle!`,
     highlight: true
@@ -34,12 +30,12 @@ const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between">
           <Link to="/">
             <h1 className="flex items-center no-underline">
-              <span className="sr-only">$handle</span>
+              <span className="sr-only">ADA Handle</span>
               <Logo />
             </h1>
           </Link>
 
-          <div className="flex items-center justify-center mr-auto relative">
+          <div className="flex items-center justify-center ml-auto relative">
             <nav
               className={`block p-8`}
             >
