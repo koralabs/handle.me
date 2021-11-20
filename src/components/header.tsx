@@ -3,6 +3,7 @@ import { Link } from "gatsby";
 import Button from "./button";
 
 import Logo from './logo';
+import { getMainDomain } from "../lib/helpers/env";
 
 interface HeaderProps {
   className?: string;
@@ -17,7 +18,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    route: `https://adahandle.com/mint`,
+    route: `https://${getMainDomain()}/mint`,
     title: `Get a Handle!`,
     highlight: true
   },

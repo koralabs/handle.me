@@ -4,6 +4,7 @@ import {
   HandlerContext,
   HandlerResponse,
 } from "@netlify/functions";
+import Fingerprint from '@emurgo/cip14-js';
 import { fetch } from 'cross-fetch';
 
 import { HEADER_HANDLE } from "../../src/lib/constants";
@@ -12,32 +13,8 @@ export interface LookupResponseBody {
   error: boolean;
   message?: string;
   address: string | null;
-  policyId: string | null;
   assetName: string | null;
-}
-
-const getNodeEndpointUrl = () => process.env.NODEJS_APP_ENDPOINT;
-
-const fetchNodeApp = async (
-  endpoint: string,
-  params: any = {}
-): Promise<Response> => {
-  const token = Buffer.from(
-    `${process.env.NODEJS_APP_USERNAME}:${process.env.NODEJS_APP_PASSWORD}`
-  ).toString('base64');
-
-  const { headers, ...rest } = params;
-
-  return fetch(
-    `${getNodeEndpointUrl()}${endpoint}`,
-    {
-      headers: {
-        'Authorization': `Basic ${token}`,
-        ...headers || {},
-        ...rest || {}
-      }
-    }
-  )
+  quantity: string | null;
 }
 
 const handler: Handler = async (
@@ -58,16 +35,24 @@ const handler: Handler = async (
   }
 
   try {
-    const data: LookupResponseBody = await fetchNodeApp(`/location`, {
-      method: 'GET',
-      headers: {
-        [HEADER_HANDLE]: handle
+    const assetName = Buffer.from(handle).toString('hex');
+    const data = await fetch(
+      `https://cardano-testnet.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`,
+      {
+        headers: {
+          project_id: process.env.BLOCKFROST_API_KEY,
+          'Content-Type': 'application/json'
+        }
       }
-    }).then(res => res.json());
+    ).then(res => res.json());
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        error: 404 === data?.status_code,
+        ...data[0],
+        assetName
+      }),
     };
   } catch (e) {
     console.log(e);

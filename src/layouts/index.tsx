@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 
 import Header from "../components/header";
+import { getPolicyID } from "../lib/helpers/env";
 
 import '../styles/global.css';
 
@@ -21,7 +22,7 @@ const Layout: FC = ({ children }): JSX.Element => {
         </main>
 
         <footer className="bg-dark-100 pt-16 text-dark-350 text-center">
-          &copy; ADA Handle
+          &copy; ADA Handle • {getPolicyID()}
         </footer>
       </div>
     </>

@@ -8,6 +8,7 @@ import { HEADER_HANDLE } from "../lib/constants";
 import { Button } from '../components/button';
 import { navigate } from "gatsby-link";
 import { isValid } from "../lib/helpers/nfts";
+import { getCardanoscanDomain, getMainDomain, getPolicyID } from "../lib/helpers/env";
 
 interface FingerprintData {
   policyId: string | null;
@@ -21,7 +22,6 @@ function IndexPage({ params }) {
   const [fingerprintData, setFingerprintData] = useState<FingerprintData>(null);
   const [validHandle, setValidHandle] = useState<boolean>(null);
   const [copying, setCopying] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     if (validHandle) {
@@ -56,20 +56,20 @@ function IndexPage({ params }) {
       .then(async res => {
         const data: LookupResponseBody = await res.json();
         if (data.error) {
-          setError(true);
+          setAddress(null);
           return;
         }
 
         setAddress(data.address);
         setFingerprintData({
           assetName: data.assetName,
-          policyId: data.policyId
+          policyId: getPolicyID()
         });
         setIsLoading(false);
       })
       .catch(e => {
         console.log(e);
-        setError(true);
+        setAddress(null);
       });
     }
 
@@ -112,7 +112,7 @@ function IndexPage({ params }) {
                 <>
                   <hr className="w-12 border-dark-300 border-2 block my-8" />
                   <h3>This Handle is Available!</h3>
-                  <Button className="w-full mt-4" href="https://adahandle.com/mint">Purchase Now &rarr;</Button>
+                  <Button className="w-full mt-4" href={`https://${getMainDomain()}/mint`}>Purchase Now &rarr;</Button>
                 </>
               ) : (
                 <>
@@ -157,7 +157,7 @@ function IndexPage({ params }) {
                     </div>
                   </div>
                   {fingerprintData && (
-                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`https://${'development' === process.env.NODE_ENV ? 'testnet.' : ''}cardanoscan.io/token/${fingerprintData.policyId}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
+                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`${getCardanoscanDomain()}/token/${fingerprintData.policyId}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
                   )}
                 </>
               )}
