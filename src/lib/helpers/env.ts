@@ -29,7 +29,7 @@ export const useMainDomain = (): string => {
   const isProduction = useIsProduction();
 
   useEffect(() => {
-    setMainDomain(isProduction ? 'adahandle.me' : 'testnet.adahandle.me');
+    setMainDomain(isProduction ? 'adahandle.com' : 'testnet.adahandle.com');
   }, [isProduction]);
 
   return mainDomain;
