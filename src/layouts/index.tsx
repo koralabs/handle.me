@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 
 import Header from "../components/header";
-import { getPolicyID } from "../lib/helpers/env";
+import { usePolicyID } from "../lib/helpers/env";
 
 import '../styles/global.css';
 
 const Layout: FC = ({ children }): JSX.Element => {
   const [mintPage, setMintPage] = useState<boolean>(false);
+  const policyID = usePolicyID();
 
   useEffect(() => {
     setMintPage(window.location.pathname.includes('mint'));
@@ -22,7 +23,7 @@ const Layout: FC = ({ children }): JSX.Element => {
         </main>
 
         <footer className="bg-dark-100 pt-16 text-dark-350 text-center">
-          &copy; ADA Handle • {getPolicyID()}
+          &copy; ADA Handle • {policyID}
         </footer>
       </div>
     </>

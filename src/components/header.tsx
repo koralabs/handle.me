@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 import Button from "./button";
 
 import Logo from './logo';
-import { getMainDomain } from "../lib/helpers/env";
+import { getMainDomain, useMainDomain } from "../lib/helpers/env";
 
 interface HeaderProps {
   className?: string;
@@ -16,15 +16,8 @@ interface NavItem {
   highlight?: boolean;
 }
 
-const navItems: NavItem[] = [
-  {
-    route: `https://${getMainDomain()}/mint`,
-    title: `Get a Handle!`,
-    highlight: true
-  },
-];
-
 const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
+  const mainDomain = useMainDomain();
   return (
     <>
       <header className={`p-4 mx-auto md:p-8 -mb-1 ${className}`}>
@@ -38,18 +31,13 @@ const Header: FC<HeaderProps> = ({ className, showMint = true }) => {
 
           <div className="flex items-center justify-center ml-auto relative">
             <nav>
-              {navItems.map((link) => {
-                return (
-                  <Link
-                    className={'block text-dark-300 hover:text-primary-200 no-underline mt-0 text-dark-400'}
-                    activeClassName="border-primary-200"
-                    key={link.title}
-                    to={link.route}
-                  >
-                    {link.title} {link.highlight && <>&rarr;</>}
-                  </Link>
-                )
-              })}
+              <Link
+                className={'block text-dark-300 hover:text-primary-200 no-underline mt-0 text-dark-400'}
+                activeClassName="border-primary-200"
+                to={`https://${mainDomain}/mint`}
+              >
+                Get a Handle! &rarr;
+              </Link>
             </nav>
           </div>
         </div>

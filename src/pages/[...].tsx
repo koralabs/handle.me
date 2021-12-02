@@ -8,7 +8,7 @@ import { HEADER_HANDLE } from "../lib/constants";
 import { Button } from '../components/button';
 import { navigate } from "gatsby-link";
 import { isValid } from "../lib/helpers/nfts";
-import { getCardanoscanDomain, getMainDomain, getPolicyID } from "../lib/helpers/env";
+import { useCardanoscanDomain, useMainDomain, usePolicyID } from "../lib/helpers/env";
 
 interface FingerprintData {
   policyId: string | null;
@@ -22,6 +22,10 @@ function IndexPage({ params }) {
   const [fingerprintData, setFingerprintData] = useState<FingerprintData>(null);
   const [validHandle, setValidHandle] = useState<boolean>(null);
   const [copying, setCopying] = useState<boolean>(false);
+
+  const mainDomain = useMainDomain();
+  const policyID = usePolicyID();
+  const cardanoscanDomain = useCardanoscanDomain();
 
   useEffect(() => {
     if (validHandle) {
@@ -63,7 +67,7 @@ function IndexPage({ params }) {
         setAddress(data.address);
         setFingerprintData({
           assetName: data.assetName,
-          policyId: getPolicyID()
+          policyId: policyID
         });
         setIsLoading(false);
       })
@@ -112,7 +116,7 @@ function IndexPage({ params }) {
                 <>
                   <hr className="w-12 border-dark-300 border-2 block my-8" />
                   <h3>This Handle is Available!</h3>
-                  <Button className="w-full mt-4" href={`https://${getMainDomain()}/mint`}>Purchase Now &rarr;</Button>
+                  <Button className="w-full mt-4" href={`https://${mainDomain}/mint`}>Purchase Now &rarr;</Button>
                 </>
               ) : (
                 <>
@@ -157,7 +161,7 @@ function IndexPage({ params }) {
                     </div>
                   </div>
                   {fingerprintData && (
-                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`${getCardanoscanDomain()}/token/${fingerprintData.policyId}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
+                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`${cardanoscanDomain}/token/${fingerprintData.policyId}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
                   )}
                 </>
               )}

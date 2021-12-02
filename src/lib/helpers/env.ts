@@ -1,48 +1,58 @@
-export const isSSR = () => typeof window === undefined;
+import { useEffect, useState } from "react";
 
-export const isProduction = (): boolean => {
-  if (isSSR()) {
-    return;
-  }
+export const useSSR = () => {
+  const [isSSR, setIsSSR] = useState(true);
+  useEffect(() => {
+    setIsSSR(typeof window === undefined);
+  }, []);
 
-  if (
-    window.location.hostname.includes('testnet') ||
-    window.location.hostname.includes('localhost')
-  ) {
-    return false;
-  }
+  return isSSR;
+};
 
-  return true;
+export const useIsProduction = (): boolean => {
+  const [isProduction, setIsProduction] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (
+      window.location.hostname.includes('testnet') ||
+      window.location.hostname.includes('localhost')
+    ) {
+      setIsProduction(false);
+    }
+  }, []);
+
+  return isProduction;
 }
 
-export const getMainDomain = (): string => {
-  if (isSSR()) {
-    return;
-  }
+export const useMainDomain = (): string => {
+  const [mainDomain, setMainDomain] = useState<string>('testnet.adahandle.me');
+  const isProduction = useIsProduction();
 
-  return isProduction()
-    ? 'adahandle.com'
-    : 'testnet.adahandle.com';
+  useEffect(() => {
+    setMainDomain(isProduction ? 'adahandle.me' : 'testnet.adahandle.me');
+  }, [isProduction]);
+
+  return mainDomain;
 }
 
-export const getCardanoscanDomain = (): string => {
-  if (isSSR()) {
-    return;
-  }
+export const useCardanoscanDomain = (): string => {
+  const [cardanoscanDomain, setCardanoscanDomain] = useState<string>('testnet.cardanoscan.io');
+  const isProduction = useIsProduction();
 
-  return isProduction()
-    ? `https://cardanoscan.io`
-    : `https://testnet.cardanoscan.io`;
+  useEffect(() => {
+    setCardanoscanDomain(isProduction ? 'cardanoscan.io' : 'testnet.cardanoscan.io');
+  }, [isProduction]);
+
+  return cardanoscanDomain;
 }
 
-export const getPolicyID = (): string => {
-  if (isSSR()) {
-    return;
-  }
+export const usePolicyID = (): string => {
+  const [policyID, setPolicyID] = useState<string>('8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3');
+  const isProduction = useIsProduction();
 
-  console.log(isProduction());
+  useEffect(() => {
+    setPolicyID(isProduction ? 'd5df2ddadd04b98215f7c3ea94fd9ab8194968f94d9d32377fd26a7c' : '8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3');
+  }, [isProduction]);
 
-  return isProduction()
-    ? 'd5df2ddadd04b98215f7c3ea94fd9ab8194968f94d9d32377fd26a7c'
-    : '8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3';
+  return policyID;
 }

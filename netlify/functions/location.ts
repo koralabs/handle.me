@@ -4,7 +4,6 @@ import {
   HandlerContext,
   HandlerResponse,
 } from "@netlify/functions";
-import Fingerprint from '@emurgo/cip14-js';
 import { fetch } from 'cross-fetch';
 
 import { HEADER_HANDLE } from "../../src/lib/constants";
