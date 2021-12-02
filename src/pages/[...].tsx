@@ -11,7 +11,6 @@ import { isValid } from "../lib/helpers/nfts";
 import { useCardanoscanDomain, useMainDomain, usePolicyID } from "../lib/helpers/env";
 
 interface FingerprintData {
-  policyId: string | null;
   assetName: string | null;
 }
 
@@ -66,8 +65,7 @@ function IndexPage({ params }) {
 
         setAddress(data.address);
         setFingerprintData({
-          assetName: data.assetName,
-          policyId: policyID
+          assetName: data.assetName
         });
         setIsLoading(false);
       })
@@ -161,7 +159,7 @@ function IndexPage({ params }) {
                     </div>
                   </div>
                   {fingerprintData && (
-                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`https://${cardanoscanDomain}/token/${fingerprintData.policyId}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
+                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`https://${cardanoscanDomain}/token/${policyID}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
                   )}
                 </>
               )}
