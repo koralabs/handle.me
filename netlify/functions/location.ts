@@ -36,7 +36,7 @@ const handler: Handler = async (
   try {
     const assetName = Buffer.from(handle).toString('hex');
     const data = await fetch(
-      `https://cardano-testnet.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`,
+      `https://cardano-${process.env.CARDANO_CONTEXT}.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`,
       {
         headers: {
           project_id: process.env.BLOCKFROST_API_KEY,
