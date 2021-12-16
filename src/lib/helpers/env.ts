@@ -10,14 +10,11 @@ export const useSSR = () => {
 };
 
 export const useIsProduction = (): boolean => {
-  const [isProduction, setIsProduction] = useState<boolean>(true);
+  const [isProduction, setIsProduction] = useState<boolean>(false);
 
   useEffect(() => {
-    if (
-      window.location.hostname.includes('testnet') ||
-      window.location.hostname.includes('localhost')
-    ) {
-      setIsProduction(false);
+    if (window.location.hostname === 'handle.me') {
+      setIsProduction(true);
     }
   }, []);
 
