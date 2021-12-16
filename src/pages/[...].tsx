@@ -8,9 +8,9 @@ import { HEADER_HANDLE } from "../lib/constants";
 import { Button } from '../components/button';
 import { navigate } from "gatsby-link";
 import { isValid } from "../lib/helpers/nfts";
+import { useCardanoscanDomain, useMainDomain, usePolicyID } from "../lib/helpers/env";
 
 interface FingerprintData {
-  policyId: string | null;
   assetName: string | null;
 }
 
@@ -21,7 +21,10 @@ function IndexPage({ params }) {
   const [fingerprintData, setFingerprintData] = useState<FingerprintData>(null);
   const [validHandle, setValidHandle] = useState<boolean>(null);
   const [copying, setCopying] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+
+  const mainDomain = useMainDomain();
+  const policyID = usePolicyID();
+  const cardanoscanDomain = useCardanoscanDomain();
 
   useEffect(() => {
     if (validHandle) {
@@ -56,20 +59,19 @@ function IndexPage({ params }) {
       .then(async res => {
         const data: LookupResponseBody = await res.json();
         if (data.error) {
-          setError(true);
+          setAddress(null);
           return;
         }
 
         setAddress(data.address);
         setFingerprintData({
-          assetName: data.assetName,
-          policyId: data.policyId
+          assetName: data.assetName
         });
         setIsLoading(false);
       })
       .catch(e => {
         console.log(e);
-        setError(true);
+        setAddress(null);
       });
     }
 
@@ -102,7 +104,7 @@ function IndexPage({ params }) {
                 className="absolute h-full left-0 top-0 px-6 py-4 opacity-10"
               />
               <div
-                className={`focus:ring-0 focus:ring-opacity-0 border-2 focus:border-white outline-none form-input bg-dark-100 border-dark-300 rounded-lg pr-6 pl-16 py-4 text-3xl w-full`}
+                className={`focus:ring-0 focus:ring-opacity-0 outline-none form-input bg-dark-100 border-dark-300 rounded-lg pr-6 pl-16 py-4 text-3xl w-full`}
               >
                 {handle}
               </div>
@@ -111,8 +113,8 @@ function IndexPage({ params }) {
               {null === address ? (
                 <>
                   <hr className="w-12 border-dark-300 border-2 block my-8" />
-                  <h3>This Handle is Available!</h3>
-                  <Button className="w-full mt-4" href="https://adahandle.com/mint">Purchase Now &rarr;</Button>
+                  <h3>This Handle isn't Minted!</h3>
+                  <Button className="w-full mt-4" href={`https://${mainDomain}/mint`}>Purchase Now &rarr;</Button>
                 </>
               ) : (
                 <>
@@ -120,7 +122,12 @@ function IndexPage({ params }) {
                     <div
                       className={`focus:ring-0 focus:ring-opacity-0 border-2 focus:border-white outline-none form-input bg-dark-100 border-dark-300 rounded-lg px-6 py-4 text-lg text-dark-300 w-full overflow-hidden`}
                     >
-                      {loading ? "Loading..." : address}
+                      {loading && "Loading..."}
+                      {!loading && 'string' === typeof address && (
+                        <span style={{ transform: 'translateX(-100%)' }}>
+                          {address.substr(0, 10)}...{address.substr(address.length - 5)}
+                        </span>
+                      )}
                       <button
                         onClick={handleCopy}
                         disabled={!address || !validHandle || loading}
@@ -157,7 +164,7 @@ function IndexPage({ params }) {
                     </div>
                   </div>
                   {fingerprintData && (
-                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`https://${'development' === process.env.NODE_ENV ? 'testnet.' : ''}cardanoscan.io/token/${fingerprintData.policyId}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
+                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`https://${cardanoscanDomain}/token/${policyID}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
                   )}
                 </>
               )}
