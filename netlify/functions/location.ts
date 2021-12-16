@@ -33,10 +33,9 @@ const handler: Handler = async (
     }
   }
 
-  const slug = process.env.NODE_ENV === 'production' ? 'cardano-mainnet' : 'cardano-testnet';
   try {
     const assetName = Buffer.from(handle).toString('hex');
-    console.log(`https://${slug}.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`);
+    console.log(`https://cardano-${process.env.CARDANO_CONTEXT}.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`);
     const data = await fetch(
       `https://${slug}.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`,
       {
