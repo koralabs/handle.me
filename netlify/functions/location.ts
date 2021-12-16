@@ -33,10 +33,12 @@ const handler: Handler = async (
     }
   }
 
+  const slug = process.env.NODE_ENV === 'production' ? 'cardano-mainnet' : 'cardano-testnet';
   try {
     const assetName = Buffer.from(handle).toString('hex');
+    console.log(`https://${slug}.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`);
     const data = await fetch(
-      `https://cardano-testnet.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`,
+      `https://${slug}.blockfrost.io/api/v0/assets/${process.env.POLICY_ID}${assetName}/addresses`,
       {
         headers: {
           project_id: process.env.BLOCKFROST_API_KEY,

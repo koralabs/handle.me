@@ -47,7 +47,7 @@ export const useCardanoscanDomain = (): string => {
 }
 
 export const usePolicyID = (): string => {
-  const [policyID, setPolicyID] = useState<string>('8d18d786e92776c824607fd8e193ec535c79dc61ea2405ddf3b09fe3');
+  const [policyID, setPolicyID] = useState<string>('');
   const isProduction = useIsProduction();
 
   useEffect(() => {
