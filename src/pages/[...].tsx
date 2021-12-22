@@ -36,7 +36,7 @@ function IndexPage({ params }) {
 
     if (paths.length === 1 && isValid(paths[0])) {
       setValidHandle(true);
-      setHandle(paths[0]);
+      setHandle(paths[0].toLowerCase());
     } else {
       setValidHandle(false);
     }
@@ -53,7 +53,7 @@ function IndexPage({ params }) {
     const loadAddress = async () => {
       await fetch('/.netlify/functions/location', {
         headers: {
-          [HEADER_HANDLE]: paths[0]
+          [HEADER_HANDLE]: paths[0].toLowerCase()
         }
       })
       .then(async res => {
