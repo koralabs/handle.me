@@ -5,6 +5,7 @@ import {
   HandlerResponse,
 } from "@netlify/functions";
 import { fetch } from 'cross-fetch';
+import * as cardanoAddresses from 'cardano-addresses';
 
 import { HEADER_HANDLE } from "../../src/lib/constants";
 
@@ -45,12 +46,36 @@ const handler: Handler = async (
       }
     ).then(res => res.json());
 
+    if (data?.status_code === 404) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          error: true,
+          assetName,
+        } as LookupResponseBody)
+      }
+    }
+
+    const [result] = data;
+    const addressDetails = await cardanoAddresses.inspectAddress(result.address);
+
+    if (addressDetails.address_type !== 1) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          error: true,
+          message: 'Address is does not appear to be a Shelly Wallet Address.',
+          ...result
+        } as LookupResponseBody)
+      }
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({
-        error: 404 === data?.status_code,
-        ...data[0],
-        assetName
+        error: false,
+        assetName,
+        ...result,
       }),
     };
   } catch (e) {

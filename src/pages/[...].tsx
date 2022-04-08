@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { LookupResponseBody } from "../../netlify/functions/location";
 import SEO from "../components/seo";
-import 'buffer';
+import "buffer";
 
 import LogoMark from "../images/logo-single.svg";
 import { HEADER_HANDLE } from "../lib/constants";
-import { Button } from '../components/button';
+import { Button } from "../components/button";
 import { navigate } from "gatsby-link";
 import { isValid } from "../lib/helpers/nfts";
-import { useCardanoscanDomain, useMainDomain, usePolicyID } from "../lib/helpers/env";
+import {
+  useCardanoscanDomain,
+  useMainDomain,
+  usePolicyID,
+} from "../lib/helpers/env";
 
 interface FingerprintData {
   assetName: string | null;
@@ -17,7 +21,8 @@ interface FingerprintData {
 function IndexPage({ params }) {
   const [loading, setIsLoading] = useState<boolean>(true);
   const [handle, setHandle] = useState<string>(null);
-  const [address, setAddress] = useState<string|boolean>(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [address, setAddress] = useState<string | boolean>(false);
   const [fingerprintData, setFingerprintData] = useState<FingerprintData>(null);
   const [validHandle, setValidHandle] = useState<boolean>(null);
   const [copying, setCopying] = useState<boolean>(false);
@@ -51,29 +56,31 @@ function IndexPage({ params }) {
     const paths = route.split("/");
 
     const loadAddress = async () => {
-      await fetch('/.netlify/functions/location', {
+      await fetch("/.netlify/functions/location", {
         headers: {
-          [HEADER_HANDLE]: paths[0]
-        }
+          [HEADER_HANDLE]: paths[0],
+        },
       })
-      .then(async res => {
-        const data: LookupResponseBody = await res.json();
-        if (data.error) {
-          setAddress(null);
-          return;
-        }
+        .then(async (res) => {
+          const data: LookupResponseBody = await res.json();
+          console.log("DATA", data);
+          if (data.error) {
+            setAddress(null);
+            if (data.message) setMessage(data.message);
+            return;
+          }
 
-        setAddress(data.address);
-        setFingerprintData({
-          assetName: data.assetName
+          setAddress(data.address);
+          setFingerprintData({
+            assetName: data.assetName,
+          });
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
+          setAddress(null);
         });
-        setIsLoading(false);
-      })
-      .catch(e => {
-        console.log(e);
-        setAddress(null);
-      });
-    }
+    };
 
     loadAddress();
   }, [handle, setIsLoading, validHandle]);
@@ -86,13 +93,20 @@ function IndexPage({ params }) {
     }, 1000);
   };
 
+  console.log("message", message);
+
   return (
     <>
       <SEO title={`$${handle}`} />
       <section id="top" className="z-0 md:max-w-xl mx-auto relative">
         <div className="grid grid-cols-12">
           <p className="text-center w-full absolute">
-            <button className="mb-4 transform -translate-y-12" onClick={() => navigate('/')}>&larr; Search</button>
+            <button
+              className="mb-4 transform -translate-y-12"
+              onClick={() => navigate("/")}
+            >
+              &larr; Search
+            </button>
           </p>
           <div className="col-span-12 md:col-span-8 md:col-start-3 gap-4 bg-dark-200 rounded-lg shadow-lg place-content-start p-4 lg:p-8 mb-16">
             <h2 className="text-4xl font-bold mb-8 text-center">
@@ -113,8 +127,19 @@ function IndexPage({ params }) {
               {null === address ? (
                 <>
                   <hr className="w-12 border-dark-300 border-2 block my-8" />
-                  <h3>This Handle isn't Minted!</h3>
-                  <Button className="w-full mt-4" href={`https://${mainDomain}/mint`}>Purchase Now &rarr;</Button>
+                  {message ? (
+                    <h3>{message}</h3>
+                  ) : (
+                    <>
+                      <h3>This Handle isn't Minted!</h3>
+                      <Button
+                        className="w-full mt-4"
+                        href={`https://${mainDomain}/mint`}
+                      >
+                        Purchase Now &rarr;
+                      </Button>
+                    </>
+                  )}
                 </>
               ) : (
                 <>
@@ -123,15 +148,18 @@ function IndexPage({ params }) {
                       className={`focus:ring-0 focus:ring-opacity-0 border-2 focus:border-white outline-none form-input bg-dark-100 border-dark-300 rounded-lg px-6 py-4 text-lg text-dark-300 w-full overflow-hidden`}
                     >
                       {loading && "Loading..."}
-                      {!loading && 'string' === typeof address && (
-                        <span style={{ transform: 'translateX(-100%)' }}>
-                          {address.substr(0, 10)}...{address.substr(address.length - 5)}
+                      {!loading && "string" === typeof address && (
+                        <span style={{ transform: "translateX(-100%)" }}>
+                          {address.substr(0, 10)}...
+                          {address.substr(address.length - 5)}
                         </span>
                       )}
                       <button
                         onClick={handleCopy}
                         disabled={!address || !validHandle || loading}
-                        className={`absolute top-0 right-0 h-full w-16 rounded-r-lg ${copying ? 'bg-primary-200' : 'bg-primary-100'}`}
+                        className={`absolute top-0 right-0 h-full w-16 rounded-r-lg ${
+                          copying ? "bg-primary-200" : "bg-primary-100"
+                        }`}
                       >
                         <svg
                           className={`w-full height-full p-5 ${
@@ -164,7 +192,16 @@ function IndexPage({ params }) {
                     </div>
                   </div>
                   {fingerprintData && (
-                    <p><a target="_blank" rel="noopener nofollow" className="text-primary-100 mt-4 text-sm block" href={`https://${cardanoscanDomain}/token/${policyID}.${fingerprintData.assetName}?tab=topholders`}>Verify on Cardanoscan &rarr;</a></p>
+                    <p>
+                      <a
+                        target="_blank"
+                        rel="noopener nofollow"
+                        className="text-primary-100 mt-4 text-sm block"
+                        href={`https://${cardanoscanDomain}/token/${policyID}.${fingerprintData.assetName}?tab=topholders`}
+                      >
+                        Verify on Cardanoscan &rarr;
+                      </a>
+                    </p>
                   )}
                 </>
               )}

@@ -3795,6 +3795,11 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001259:
   dependencies:
     nanocolors "^0.1.0"
 
+cardano-addresses@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/cardano-addresses/-/cardano-addresses-3.9.0.tgz#c2c93d07767455c392880b2abc63b7f4b666b9b8"
+  integrity sha512-kxG3yl18PKQ/FUHXApf1XavdRKQsPHh3MO8GZdt5Cs5ZhUG4Epch7PG0AXUJEbCFdC+xd/abSNWFb2oovO5TQw==
+
 cardinal@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/cardinal/-/cardinal-2.1.1.tgz#7cc1055d822d212954d07b085dea251cc7bc5505"
