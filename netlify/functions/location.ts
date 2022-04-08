@@ -14,6 +14,7 @@ export interface LookupResponseBody {
   message?: string;
   address: string | null;
   assetName: string | null;
+  isShellyAddress: boolean;
   quantity: string | null;
 }
 
@@ -59,21 +60,11 @@ const handler: Handler = async (
     const [result] = data;
     const addressDetails = await cardanoAddresses.inspectAddress(result.address);
 
-    if (addressDetails.address_type !== 1) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          error: true,
-          message: 'Address is does not appear to be a Shelly Wallet Address.',
-          ...result
-        } as LookupResponseBody)
-      }
-    }
-
     return {
       statusCode: 200,
       body: JSON.stringify({
         error: false,
+        isShellyAddress: addressDetails.address_type === 1,
         assetName,
         ...result,
       }),

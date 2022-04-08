@@ -26,6 +26,7 @@ function IndexPage({ params }) {
   const [fingerprintData, setFingerprintData] = useState<FingerprintData>(null);
   const [validHandle, setValidHandle] = useState<boolean>(null);
   const [copying, setCopying] = useState<boolean>(false);
+  const [isShellyAddress, setIsShellyAddress] = useState(true);
 
   const mainDomain = useMainDomain();
   const policyID = usePolicyID();
@@ -63,13 +64,12 @@ function IndexPage({ params }) {
       })
         .then(async (res) => {
           const data: LookupResponseBody = await res.json();
-          console.log("DATA", data);
           if (data.error) {
             setAddress(null);
-            if (data.message) setMessage(data.message);
             return;
           }
 
+          setIsShellyAddress(data.isShellyAddress);
           setAddress(data.address);
           setFingerprintData({
             assetName: data.assetName,
@@ -92,8 +92,6 @@ function IndexPage({ params }) {
       setCopying(false);
     }, 1000);
   };
-
-  console.log("message", message);
 
   return (
     <>
@@ -191,6 +189,24 @@ function IndexPage({ params }) {
                       </button>
                     </div>
                   </div>
+                  {isShellyAddress ? (
+                    <></>
+                  ) : (
+                    <div>
+                      <hr className="w-12 border-dark-300 border-2 block my-8" />
+                      <div
+                        style={{ backgroundColor: "#bd8a45" }}
+                        className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
+                        role="alert"
+                      >
+                        <p className="font-bold">Warning</p>
+                        <p>
+                          Address is does not appear to be a Shelly Wallet
+                          Address.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   {fingerprintData && (
                     <p>
                       <a
