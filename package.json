@@ -7,7 +7,6 @@
     "@emurgo/cardano-serialization-lib-nodejs": "^9.1.0",
     "@emurgo/cip14-js": "^3.0.1",
     "aws-sdk": "^2.990.0",
-    "cardano-addresses": "^3.9.0",
     "cross-fetch": "^3.1.4",
     "gatsby": "^4.0.0-next",
     "gatsby-plugin-google-gtag": "^3.13.0",
