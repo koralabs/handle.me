@@ -22,7 +22,7 @@ export const useIsProduction = (): boolean => {
 }
 
 export const useMainDomain = (): string => {
-  const [mainDomain, setMainDomain] = useState<string>('testnet.adahandle.me');
+  const [mainDomain, setMainDomain] = useState<string>('testnet.adahandle.com');
   const isProduction = useIsProduction();
 
   useEffect(() => {
