@@ -196,7 +196,7 @@ function IndexPage({ params }) {
             >
               <p className="font-bold">Warning</p>
               <p>
-                Address is does not appear to be a Shelly Wallet Address. If
+                Address does not appear to be a Shelly Wallet Address. If
                 address is a smart contract, it's possible that any ADA sent
                 might be lost.
               </p>
