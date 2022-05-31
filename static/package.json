@@ -10,8 +10,8 @@
     "lint": "next lint",
     "fingerprint:assets": "sh ./deploy.sh",
     "deploy": "yarn --silent build 1> /dev/null && yarn --silent export 1> /dev/null && chmod +x ./deploy.sh && ./deploy.sh",
-    "build:testnet": "yarn --silent deploy",
-    "build:mainnet": "yarn --silent deploy"
+    "build:testnet": "NEXT_PUBLIC_MINTING_API_DOMAIN=https://bff.handle.me yarn --silent deploy",
+    "build:mainnet": "NEXT_PUBLIC_MINTING_API_DOMAIN=https://bff.handle.me yarn --silent deploy"
   },
   "dependencies": {
     "next": "12.1.6",
