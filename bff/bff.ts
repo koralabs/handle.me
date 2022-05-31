@@ -29,7 +29,7 @@ const runHandler = async (event: ALBEvent, context: Context): Promise<ALBResult>
 
         // If this isn't a BFF request, let's try to serve it out of the host bucket
         if (!host?.includes('bff.') && !host?.includes('localhost')) {
-            let file = event.path;
+            let file = decodeURI(event.path);
             if (file == '/') {
                 file = '/index.html';
             }
@@ -39,7 +39,10 @@ const runHandler = async (event: ALBEvent, context: Context): Promise<ALBResult>
             const htmlEx = /^\/[a-zA-Z0-9\-_]+\.html$/;
             if (file.match(htmlEx)) {
                 file = `/assets/${process.env.VERSION_HASH}/html${file}`;
+            } else {
+                file = `/assets/${process.env.VERSION_HASH}/html/[handle].html`;
             }
+
             file = file.substring(1);
 
             const s3 = new AWS.S3();
