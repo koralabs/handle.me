@@ -29,13 +29,21 @@ const runHandler = async (event: ALBEvent, context: Context): Promise<ALBResult>
 
         // If this isn't a BFF request, let's try to serve it out of the host bucket
         if (!host?.includes('bff.') && !host?.includes('localhost')) {
-            let file = 'index.html';
-            if (event.path == 'favicon.ico') {
-                file = 'favicon.ico';
+            let file = event.path;
+            if (file == '/') {
+                file = '/index.html';
             }
-            if (event.path.startsWith('/static/')) {
-                file = event.path.substring(1);
+            // if (event.path == '/favicon.ico') {
+            //     file = '/favicon.ico';
+            // }
+            const htmlEx = /^\/[a-zA-Z0-9\-_]+\.html$/;
+            if (file.match(htmlEx)) {
+                file = `/assets/${process.env.VERSION_HASH}/html${file}`;
             }
+            file = file.substring(1);
+
+            const s3 = new AWS.S3();
+
             return await new Promise((success, reject) => {
                 s3.getObject({ Bucket: host || 'handle.me', Key: file || '' }, (err, data) => {
                     if (err) {
