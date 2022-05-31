@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": [
+      "ESNext"
+    ],
+    "allowJs": false,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "removeComments": true,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "sourceMap": true,
+  },
+  "exclude": [
+    "node_modules",
+    "./scripts",
+    "**/*.test.ts"
+  ]
+}
