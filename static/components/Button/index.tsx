@@ -42,6 +42,8 @@ export const Button: React.FC<ButtonProps> = ({
             !disabled && classes.push("bg-primary-100 hover:bg-primary-200 active:bg-dark-100 text-white");
     }
 
+    console.log('className', className);
+
     if (internal && href?.length) {
         return (
             <Link href={href} className={classes.join(" ") + " " + className} {...rest}>

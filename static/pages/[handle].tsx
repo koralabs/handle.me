@@ -130,6 +130,8 @@ const HandlePage: NextPage = () => {
                             <Button
                                 className="w-full mt-4"
                                 href={`https://${mainDomain}/mint`}
+                                buttonStyle="primary"
+                                internal={false}
                             >
                                 Purchase Now &rarr;
                             </Button>
