@@ -45,7 +45,7 @@ const runHandler = async (event: ALBEvent, context: Context): Promise<ALBResult>
             const s3 = new AWS.S3();
 
             return await new Promise((success, reject) => {
-                s3.getObject({ Bucket: host || 'handle.me', Key: file || '' }, (err, data) => {
+                s3.getObject({ Bucket: 'handle.me', Key: file || '' }, (err, data) => {
                     if (err) {
                         reject(err);
                     }
