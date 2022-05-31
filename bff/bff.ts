@@ -33,12 +33,12 @@ const runHandler = async (event: ALBEvent, context: Context): Promise<ALBResult>
             if (file == '/') {
                 file = '/index.html';
             }
-            // if (event.path == '/favicon.ico') {
-            //     file = '/favicon.ico';
-            // }
+
             const htmlEx = /^\/[a-zA-Z0-9\-_]+\.html$/;
             if (file.match(htmlEx)) {
                 file = `/assets/${process.env.VERSION_HASH}/html${file}`;
+            } else if (event.path == '/favicon.ico') {
+                file = '/favicon.ico';
             } else {
                 file = `/assets/${process.env.VERSION_HASH}/html/[handle].html`;
             }

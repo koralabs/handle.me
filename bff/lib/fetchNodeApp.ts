@@ -9,8 +9,6 @@ export const fetchNodeApp = async <T>(endpoint: string, params: any = {}): Promi
     const baseUrl = process.env.NODEJS_APP_ENDPOINT;
     const url = `${baseUrl}/${endpoint}`;
 
-    console.log('URLLLLLL', url);
-
     return fetch(url, {
         headers: {
             Authorization: `Basic ${token}`,
