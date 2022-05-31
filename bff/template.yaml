@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    BFF Local Runner
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+    Function:
+        Timeout: 3
+    Api:
+        Cors:
+            AllowMethods: "'GET,POST,OPTIONS'"
+            AllowHeaders: "'*'"
+            AllowOrigin: "'*'"
+            AllowCredentials: "'*'"
+
+Resources:
+    HandleMeFunction:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: ./
+            Handler: bff.lambdaHandler
+            Runtime: nodejs14.x
+            Timeout: 60
+            Environment:
+                Variables:
+                    NODEJS_APP_USERNAME: ''
+                    NODEJS_APP_PASSWORD: ''
+                    NODEJS_APP_ENDPOINT: ''
+                    MY_AWS_ACCESS_KEY: ''
+                    MY_AWS_SECRET_ACCESS_KEY: ''
+                    MY_AWS_BUCKET: ''
+                    MY_AWS_TOKEN_KEY_SESSION: ''
+                    MY_AWS_TOKEN_KEY_ACCESS: ''
+                    RECAPTCHA_SECRET_FALLBACK: ''
+                    RECAPTCHA_SECRET: ''
+            Architectures:
+                - x86_64
+            Events:
+                HandleMe:
+                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                    Properties:
+                        Path: /{proxy+}
+                        Method: ANY
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: 'es2020'
+                Sourcemap: true
+                EntryPoints:
+                    - bff.ts
+
+Outputs:
+    # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+    # Find out more about other implicit resources you can reference within SAM
+    # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+    HandleMeApi:
+        Description: 'API Gateway endpoint URL for Prod stage for Hello World function'
+        Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/help/'
+    HandleMeFunction:
+        Description: 'Hello World Lambda Function ARN'
+        Value: !GetAtt HandleMeFunction.Arn
+    HandleMeFunctionIamRole:
+        Description: 'Implicit IAM Role created for Hello World function'
+        Value: !GetAtt HandleMeFunctionRole.Arn
